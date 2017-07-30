@@ -9,19 +9,19 @@ import java.lang.Math;
 
 public class Shape {
 
-    enum Tetrominos { NoShpe, ZShape, SShape, LineShape,
+    enum Tetrominoes { NoShape, ZShape, SShape, LineShape,
     TShape, SquareShape, LShape, MirroredLShape}
 
-    private Tetrominos pieceShape;
+    private Tetrominoes pieceShape;
     private int coords[][];
     private int[][][] coordsTable;
 
     public Shape() {
         coords = new int[4][2];
-        setShape(Tetrominos.NoShpe);
+        setShape(Tetrominoes.NoShape);
     }
 
-    public void setShape(Tetrominos shape) {
+    public void setShape(Tetrominoes shape) {
 
         coordsTable = new int[][][] {
                 {{0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -58,7 +58,7 @@ public class Shape {
         return coords[index][1];
     }
 
-    public Tetrominos getShape() {
+    public Tetrominoes getShape() {
         return pieceShape;
     }
 
@@ -66,7 +66,7 @@ public class Shape {
 
         Random r = new Random();
         int x = Math.abs(r.nextInt()) % 7 + 1;
-        Tetrominos[] values = Tetrominos.values();
+        Tetrominoes[] values = Tetrominoes.values();
         setShape(values[x]);
     }
 
@@ -90,7 +90,7 @@ public class Shape {
 
     public Shape rotateLeft() {
 
-        if(pieceShape == Tetrominos.SquareShape) {
+        if(pieceShape == Tetrominoes.SquareShape) {
             return this;
         }
 
@@ -106,7 +106,7 @@ public class Shape {
 
     public Shape rotateRight() {
 
-        if(pieceShape == Tetrominos.SquareShape) {
+        if(pieceShape == Tetrominoes.SquareShape) {
             return this;
         }
 

@@ -19,7 +19,7 @@ import javax.swing.Timer;
 
 import com.sun.corba.se.impl.oa.poa.ActiveObjectMap;
 import com.sun.corba.se.impl.orbutil.graph.Graph;
-import tetris.Shape.Tetrominos;
+import tetris.Shape.Tetrominoes;
 
 public class Board extends JPanel implements ActionListener {
 
@@ -35,7 +35,7 @@ public class Board extends JPanel implements ActionListener {
     int curY = 0;
     JLabel statusbar;
     Shape curPiece;
-    Tetrominos[] board;
+    Tetrominoes[] board;
 
     public Board(Tetris parent) {
 
@@ -45,7 +45,7 @@ public class Board extends JPanel implements ActionListener {
         timer.start();
 
         statusbar = parent.getStatusbar();
-        board = new Tetrominos[BoardWidth * BoardHeight];
+        board = new Tetrominoes[BoardWidth * BoardHeight];
         addKeyListener(new TAdapter());
         clearBoard();
     }
@@ -68,7 +68,7 @@ public class Board extends JPanel implements ActionListener {
         return (int) getSize().getHeight() / BoardHeight;
     }
 
-    Tetrominos shapeAt(int x, int y) {
+    Tetrominoes shapeAt(int x, int y) {
         return board[(y * BoardWidth) + x];
     }
 
@@ -116,20 +116,20 @@ public class Board extends JPanel implements ActionListener {
 
         for(int i = 0; i < BoardHeight; ++i) {
             for(int j = 0; j < BoardWidth; ++j) {
-                Tetrominos shape = shapeAt(j, BoardHeight - i - 1);
-                if(shape != Tetrominos.NoShpe) {
+                Tetrominoes shape = shapeAt(j, BoardHeight - i - 1);
+                if(shape != Tetrominoes.NoShape) {
                     drawSquare(g, 0 + j * squareWidth(),
                             boardTop + i * squareHeight(), shape);
                 }
             }
         }
 
-        if(curPiece.getShape() != Tetrominos.NoShpe) {
+        if(curPiece.getShape() != Tetrominoes.NoShape) {
             for(int i = 0; i < 4; ++i) {
                 int x = curX + curPiece.x(i);
-                int y = curY + curPiece.y(i);
+                int y = curY - curPiece.y(i);
                 drawSquare(g, 0 + x * squareWidth(),
-                        boardTop + (BoardHeight - y -1) * squareHeight(),
+                        boardTop + (BoardHeight - y - 1) * squareHeight(),
                         curPiece.getShape());
             }
         }
@@ -160,7 +160,7 @@ public class Board extends JPanel implements ActionListener {
     private void clearBoard() {
 
         for(int i = 0; i < BoardHeight * BoardWidth; ++i) {
-            board[i] = Tetrominos.NoShpe;
+            board[i] = Tetrominoes.NoShape;
         }
     }
 
@@ -186,7 +186,7 @@ public class Board extends JPanel implements ActionListener {
         curY = BoardHeight - 1 + curPiece.minY();
 
         if(!tryMove(curPiece, curX, curY)) {
-            curPiece.setShape(Tetrominos.NoShpe);
+            curPiece.setShape(Tetrominoes.NoShape);
             timer.stop();
             isStarted = false;
             statusbar.setText("Game Over");
@@ -203,7 +203,7 @@ public class Board extends JPanel implements ActionListener {
                 return false;
             }
 
-            if(shapeAt(x, y) != Tetrominos.NoShpe) {
+            if(shapeAt(x, y) != Tetrominoes.NoShape) {
                 return false;
             }
         }
@@ -223,7 +223,7 @@ public class Board extends JPanel implements ActionListener {
             boolean lineIsFull = true;
 
             for(int j = 0; j < BoardWidth; ++j) {
-                if(shapeAt(j, i) == Tetrominos.NoShpe) {
+                if(shapeAt(j, i) == Tetrominoes.NoShape) {
                     lineIsFull = false;
                     break;
                 }
@@ -244,12 +244,12 @@ public class Board extends JPanel implements ActionListener {
             numLinesRemoved += numFullLines;
             statusbar.setText(String.valueOf(numLinesRemoved));
             isFallingFinished = true;
-            curPiece.setShape(Tetrominos.NoShpe);
+            curPiece.setShape(Tetrominoes.NoShape);
             repaint();
         }
     }
 
-    private void drawSquare(Graphics g, int x, int y, Tetrominos shape) {
+    private void drawSquare(Graphics g, int x, int y, Tetrominoes shape) {
 
         Color colors[] = {new Color(0, 0, 0), new Color(204, 102, 102),
         new Color(102, 204, 102), new Color(102, 102, 204),
@@ -274,7 +274,7 @@ public class Board extends JPanel implements ActionListener {
 
         public void keyPressed(KeyEvent e) {
 
-            if(!isStarted || curPiece.getShape() == Tetrominos.NoShpe) {
+            if(!isStarted || curPiece.getShape() == Tetrominoes.NoShape) {
                 return;
             }
 
